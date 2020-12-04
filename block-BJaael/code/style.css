@@ -69,14 +69,17 @@ h1 {
   border: 2px solid;
 }
 
-.boxes {
+.flex {
   display: flex;
   flex-wrap: wrap;
 }
-.box {
+.boxes {
   width: 4rem;
   height: 4rem;
-  border: 1px solid;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .text {
   height: 100%;
