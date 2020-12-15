@@ -1,58 +1,154 @@
-// 1. Change the title of the page to `Hello AltCampus!`
+let root = document.querySelector("ul");
+let cardsArr = [
+  {
+    name: "fish",
+    img: "img/fish.png",
+  },
+  {
+    name: "fish",
+    img: "img/fish.png",
+  },
+  {
+    name: "bot",
+    img: "img/bot.png",
+  },
+  {
+    name: "bot",
+    img: "img/bot.png",
+  },
+  {
+    name: "tree",
+    img: "img/tree.png",
+  },
+  {
+    name: "tree",
+    img: "img/tree.png",
+  },
+  {
+    name: "redbot",
+    img: "img/redbot.png",
+  },
+  {
+    name: "redbot",
+    img: "img/redbot.png",
+  },
+  {
+    name: "img2",
+    img: "img/img2.png",
+  },
+  {
+    name: "img2",
+    img: "img/img2.png",
+  },
+  {
+    name: "img4",
+    img: "img/img4.png",
+  },
+  {
+    name: "img4",
+    img: "img/img4.png",
+  },
+  {
+    name: "fox",
+    img: "img/fox.png",
+  },
+  {
+    name: "fox",
+    img: "img/fox.png",
+  },
+  {
+    name: "fb",
+    img: "img/fb.png",
+  },
+  {
+    name: "fb",
+    img: "img/fb.png",
+  },
+];
 
-// 2. Select the element using the children property:
+let delay = 500;
 
-//    - Select the `h1` element and change the value to `Learning DOM`
+let count = 0;
+let firstGuess = "";
+let secondGuess = "";
+let previousTarget = [];
 
-//    - Select the first `li` element inside the `ul` with class `topics` and change the innerText to `all about document`
-//    - Select the input element with name `email`
+let game = document.querySelector(".game");
+let grid = document.createElement("section");
 
-// 3. Log the number (using console.log) of children of all the `li` element inside the ul with class `topics`
+grid.classList.add("grid");
+game.appendChild(grid);
+cardsArr.sort(() => 0.5 - Math.random());
 
-// 4. Select the first input using the `type` selector and store them in variable named `emailInput`
+cardsArr.forEach((elm) => {
+  let card = document.createElement("div");
+  // let img = document.createElement("img");
+  // img.src = elm.img;
+  // card.append(img);
+  card.classList.add("card");
+  card.dataset.name = elm.name;
 
-// 5. Select the ul element using class selector and store in `topics`
+  let front = document.createElement("div");
+  front.classList.add("front");
+  let back = document.createElement("div");
+  back.classList.add("back");
 
-// 6. Select the first label element and store in `label`
+  back.style.backgroundImage = `url(${elm.img})`;
+  grid.appendChild(card);
+  card.append(front);
+  card.append(back);
+});
 
-// 7. Select the input of type `checkbox` with the `id` selector and store in `inputCheckbox`
+const match = () => {
+  var selected = document.querySelectorAll(".selected");
+  selected.forEach((card) => {
+    card.classList.add("match");
+  });
+};
 
-// 8. Select the input of type password using Attribute selectors. (eg: input[type="text"]) and store in `password`
+const resetGuess = () => {
+  firstGuess = "";
+  secondGuess = "";
+  count = 0;
+  previousTarget = null;
+  var selected = document.querySelectorAll(".selected");
+  selected.forEach((elm) => {
+    elm.classList.remove("selected");
+  });
+};
 
-// 9. Select the input using the placeholder attribute selector with value `password` and store in `attrPassword`
+function handleEventGrid(event) {
+  console.log(event.target.parentNode);
+  let clicked = event.target;
+  if (
+    clicked.nodeName == "SECTION" ||
+    clicked === previousTarget ||
+    clicked.parentNode.classList.contains("selected") ||
+    clicked.parentNode.classList.contains("match")
+  ) {
+    return;
+  }
 
-// 10. Select all the `li` element and store in `allTopics`
+  if (count < 2) {
+    count++;
+    if (count === 1) {
+      firstGuess = clicked.parentNode.dataset.name;
 
-// 11. Select all the input element of any type and store in `allInput`
+      clicked.parentNode.classList.add("selected");
+    } else {
+      secondGuess = clicked.parentNode.dataset.name;
+      clicked.parentNode.classList.add("selected");
+    }
+    if (firstGuess !== "" && secondGuess !== "") {
+      if (firstGuess === secondGuess) {
+        setTimeout(match, delay);
+        setTimeout(resetGuess, delay);
+      }
+    }
+    previousTarget = clicked;
+  } else {
+    setTimeout(resetGuess, delay);
+  }
+}
 
-// 12. Use forEach to console the `innerText` property of all the li element in `allTopics` variable.
-
-// 13. Select all the elements with class `list` and store in variable `listOfSelectedTopics`
-
-// 14. Select the first li element inside the `ul` element using `>` (direct child) and store in `firstLi`
-
-// 15. Select all the img element and log the number of element saying `The total number of img element is ---`
-
-// 16. Select all the `p` element and store in `allPElement`
-
-// 17. Select all the buttons and log the count of buttons.
-
-// 18. Select all the `label` element and log the count.
-
-// 19. Select all the elements with `id` of `test`
-
-// 20. Select the first element with id `test` using `getElementById`
-
-// 21. Select the parent element of the element stored in `topics` variable (#5) and log the element.
-
-// 22. Select the next element sibling of the element stored in `topics` variable (#5) and log the element.
-
-// 23. Select the previous element sibling of the element stored in `topics` variable (#5) and change the `innerText` property to `Learning About Walking the DOM`.
-
-// 24. Select the first element child of the element stored in `topics` variable (#5) and change the `innerText` property of the element to `This is the first child element`.
-
-// 25. Select the last element child of the element stored in `topics` variable (#5) and log the `typeof` the element.
-
-// 26. Select the element with type `fieldset` and store in a variable named `fieldsetElm`.
-
-// 27. Select the parent element of the element stored in `fieldsetElm` variable (#5) and log the `typeof` the element.
+grid.addEventListener("click", handleEventGrid);
